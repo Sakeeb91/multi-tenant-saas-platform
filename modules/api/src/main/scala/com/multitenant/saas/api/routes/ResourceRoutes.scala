@@ -71,12 +71,10 @@ object ResourceRoutes:
   ): ZIO[ResourceService, Nothing, Response] =
     (for
       limit <- ZIO.succeed {
-        val limitChunk = req.url.queryParams.getAll("limit")
-        limitChunk.toList.headOption.flatMap(_.toIntOption).getOrElse(20)
+        getQueryParamInt(req, "limit").getOrElse(20)
       }
       offset <- ZIO.succeed {
-        val offsetChunk = req.url.queryParams.getAll("offset")
-        offsetChunk.toList.headOption.flatMap(_.toIntOption).getOrElse(0)
+        getQueryParamInt(req, "offset").getOrElse(0)
       }
       // TODO: Extract from auth context
       tenantId = TenantId.generate
@@ -155,3 +153,10 @@ object ResourceRoutes:
     Response
       .json(ErrorResponse("bad_request", "BAD_REQUEST", message).toJson)
       .status(Status.BadRequest)
+
+  private def getQueryParamInt(req: Request, name: String): Option[Int] =
+    val chunk = req.url.queryParams.getAll(name)
+    if chunk.isEmpty then None
+    else
+      val value: String = chunk(0)
+      value.toIntOption

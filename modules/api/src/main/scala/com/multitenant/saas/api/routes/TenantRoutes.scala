@@ -64,20 +64,8 @@ object TenantRoutes:
       req: Request
   ): ZIO[TenantService, Nothing, Response] =
     (for
-      limit <- ZIO.succeed(
-        req.url.queryParams
-          .get("limit")
-          .flatMap(_.headOption)
-          .flatMap(_.toIntOption)
-          .getOrElse(20)
-      )
-      offset <- ZIO.succeed(
-        req.url.queryParams
-          .get("offset")
-          .flatMap(_.headOption)
-          .flatMap(_.toIntOption)
-          .getOrElse(0)
-      )
+      limit <- ZIO.succeed(getQueryParamInt(req, "limit").getOrElse(20))
+      offset <- ZIO.succeed(getQueryParamInt(req, "offset").getOrElse(0))
       tenants <- TenantService.list(limit, offset).mapError(toResponse)
       response = TenantListResponse(
         items = tenants.map(TenantResponse.from),
@@ -133,3 +121,10 @@ object TenantRoutes:
     Response
       .json(ErrorResponse("bad_request", "BAD_REQUEST", message).toJson)
       .status(Status.BadRequest)
+
+  private def getQueryParamInt(req: Request, name: String): Option[Int] =
+    val chunk = req.url.queryParams.getAll(name)
+    if chunk.isEmpty then None
+    else
+      val value: String = chunk(0)
+      value.toIntOption
