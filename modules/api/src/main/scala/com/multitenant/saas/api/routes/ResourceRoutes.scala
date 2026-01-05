@@ -71,10 +71,10 @@ object ResourceRoutes:
   ): ZIO[ResourceService, Nothing, Response] =
     (for
       limit <- ZIO.succeed(
-        req.url.queryParams.get("limit").flatMap(_.headOption).flatMap(_.toIntOption).getOrElse(20)
+        req.url.queryParams.getAll("limit").headOption.flatMap(_.toIntOption).getOrElse(20)
       )
       offset <- ZIO.succeed(
-        req.url.queryParams.get("offset").flatMap(_.headOption).flatMap(_.toIntOption).getOrElse(0)
+        req.url.queryParams.getAll("offset").headOption.flatMap(_.toIntOption).getOrElse(0)
       )
       // TODO: Extract from auth context
       tenantId = TenantId.generate
