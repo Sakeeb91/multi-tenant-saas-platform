@@ -54,7 +54,7 @@ final case class TenantAwareDataSourceLive(dataSource: DataSource)
         try
           // Use SET LOCAL so it's scoped to the current transaction
           // The UUID is already validated by TenantId type
-          stmt.execute(
+          val _ = stmt.execute(
             s"SET LOCAL app.current_tenant_id = '${tenantId.value}'"
           )
         finally stmt.close()
@@ -65,7 +65,8 @@ final case class TenantAwareDataSourceLive(dataSource: DataSource)
     ZIO
       .attemptBlocking {
         val stmt = conn.createStatement()
-        try stmt.execute("RESET app.current_tenant_id")
+        try
+          val _ = stmt.execute("RESET app.current_tenant_id")
         finally stmt.close()
       }
       .orDie
