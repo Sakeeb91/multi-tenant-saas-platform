@@ -2,8 +2,8 @@ package com.multitenant.saas.services
 
 import com.multitenant.saas.domain.ids.*
 import com.multitenant.saas.domain.models.Resource
-import com.multitenant.saas.errors.*
-import com.multitenant.saas.errors.AppError.InfraError
+import com.multitenant.saas.errors.AppError
+import com.multitenant.saas.errors.AppError.{InfraError, NotFound}
 import com.multitenant.saas.database.repositories.ResourceRepository
 import zio.*
 import zio.test.*

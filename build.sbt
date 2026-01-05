@@ -74,7 +74,10 @@ lazy val api = (project in file("modules/api"))
     name := "api",
     commonSettings,
     libraryDependencies ++= Seq(
-      "dev.zio" %% "zio-http" % zioHttpVersion
+      "dev.zio" %% "zio-http" % zioHttpVersion,
+      "dev.zio" %% "zio-test" % zioVersion % Test,
+      "dev.zio" %% "zio-test-sbt" % zioVersion % Test,
+      "dev.zio" %% "zio-test-magnolia" % zioVersion % Test
     )
   )
 
