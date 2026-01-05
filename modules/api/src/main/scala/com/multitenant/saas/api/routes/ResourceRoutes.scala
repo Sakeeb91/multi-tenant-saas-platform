@@ -3,7 +3,8 @@ package com.multitenant.saas.api.routes
 import com.multitenant.saas.api.dto.*
 import com.multitenant.saas.domain.ids.{ResourceId, TenantId, UserId}
 import com.multitenant.saas.services.ResourceService
-import com.multitenant.saas.errors.*
+import com.multitenant.saas.errors.AppError
+import com.multitenant.saas.errors.AppError.*
 import zio.*
 import zio.http.*
 import zio.json.*

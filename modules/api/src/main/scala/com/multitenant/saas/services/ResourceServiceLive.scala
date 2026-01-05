@@ -2,7 +2,8 @@ package com.multitenant.saas.services
 
 import com.multitenant.saas.domain.ids.{ResourceId, TenantId, UserId}
 import com.multitenant.saas.domain.models.Resource
-import com.multitenant.saas.errors.{AppError, NotFound, ValidationError}
+import com.multitenant.saas.errors.AppError
+import com.multitenant.saas.errors.AppError.{NotFound, ValidationError}
 import com.multitenant.saas.database.repositories.ResourceRepository
 import zio.*
 import java.time.Instant

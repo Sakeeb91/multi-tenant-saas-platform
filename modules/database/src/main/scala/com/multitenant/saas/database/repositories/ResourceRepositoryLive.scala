@@ -2,8 +2,8 @@ package com.multitenant.saas.database.repositories
 
 import com.multitenant.saas.domain.ids.{ResourceId, TenantId, UserId}
 import com.multitenant.saas.domain.models.Resource
-import com.multitenant.saas.errors.{AppError, DatabaseError}
-import com.multitenant.saas.errors.AppError.InfraError
+import com.multitenant.saas.errors.AppError
+import com.multitenant.saas.errors.AppError.{DatabaseError, InfraError}
 import io.getquill.*
 import io.getquill.jdbczio.Quill
 import zio.*

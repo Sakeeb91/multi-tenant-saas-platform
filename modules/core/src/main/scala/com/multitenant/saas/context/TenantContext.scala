@@ -30,3 +30,25 @@ final case class TenantContext(
     case Role.Member => 1
     case Role.Admin  => 2
     case Role.Owner  => 3
+
+object TenantContext:
+  /** Get the full tenant context from the environment */
+  def get: URIO[TenantContext, TenantContext] = ZIO.service[TenantContext]
+
+  /** Get just the tenant ID from the context */
+  def tenantId: URIO[TenantContext, TenantId] = get.map(_.tenantId)
+
+  /** Get the tenant from the context */
+  def tenant: URIO[TenantContext, Tenant] = get.map(_.tenant)
+
+  /** Get the current user from the context */
+  def currentUser: URIO[TenantContext, User] = get.map(_.currentUser)
+
+  /** Run effect with tenant context in scope */
+  def provide[R, E, A](ctx: TenantContext)(
+      effect: ZIO[R & TenantContext, E, A]
+  ): ZIO[R, E, A] =
+    effect.provideSomeLayer(ZLayer.succeed(ctx))
+
+/** Type alias for tenant-scoped effects */
+type TenantIO[+E, +A] = ZIO[TenantContext, E, A]
