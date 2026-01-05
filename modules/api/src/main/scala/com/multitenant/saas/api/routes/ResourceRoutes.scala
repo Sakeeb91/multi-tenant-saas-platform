@@ -70,12 +70,14 @@ object ResourceRoutes:
       req: Request
   ): ZIO[ResourceService, Nothing, Response] =
     (for
-      limit <- ZIO.succeed(
-        req.url.queryParams.getAll("limit").headOption.flatMap(_.toIntOption).getOrElse(20)
-      )
-      offset <- ZIO.succeed(
-        req.url.queryParams.getAll("offset").headOption.flatMap(_.toIntOption).getOrElse(0)
-      )
+      limit <- ZIO.succeed {
+        val limitChunk = req.url.queryParams.getAll("limit")
+        limitChunk.toList.headOption.flatMap(_.toIntOption).getOrElse(20)
+      }
+      offset <- ZIO.succeed {
+        val offsetChunk = req.url.queryParams.getAll("offset")
+        offsetChunk.toList.headOption.flatMap(_.toIntOption).getOrElse(0)
+      }
       // TODO: Extract from auth context
       tenantId = TenantId.generate
       resources <- ResourceService
