@@ -15,7 +15,8 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-          cache: 'sbt'
+      - name: Setup sbt
+        uses: sbt/setup-sbt@v1
       - name: Compile
         run: sbt compile
       - name: Test
