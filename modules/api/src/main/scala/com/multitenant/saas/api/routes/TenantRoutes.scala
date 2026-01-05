@@ -123,6 +123,4 @@ object TenantRoutes:
       .status(Status.BadRequest)
 
   private def getQueryParamInt(req: Request, name: String): Option[Int] =
-    req.url.queryParams.getAll(name).flatten.toList match
-      case head :: _ => scala.util.Try(head.toInt).toOption
-      case _         => None
+    req.url.queryParam(name).flatMap(s => scala.util.Try(s.toInt).toOption)
