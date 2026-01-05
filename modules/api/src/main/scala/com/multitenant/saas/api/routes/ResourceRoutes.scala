@@ -155,6 +155,6 @@ object ResourceRoutes:
       .status(Status.BadRequest)
 
   private def getQueryParamInt(req: Request, name: String): Option[Int] =
-    req.url.queryParams.getAll(name).headOption.flatMap { str =>
-      scala.util.Try(str.toInt).toOption
-    }
+    val values = req.url.queryParams.getAll(name)
+    if values.isEmpty then None
+    else scala.util.Try(values.toSeq.head.toInt).toOption
